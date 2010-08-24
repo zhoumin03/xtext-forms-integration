@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipselabs.xtfo.demo.metamodel;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.eclipselabs.xtfo.demo.metamodel.demo,
+ org.eclipselabs.xtfo.demo.metamodel.demo.impl,
+ org.eclipselabs.xtfo.demo.metamodel.demo.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.xtext.example.arithmetics;visibility:=reexport,
+ org.eclipse.xtext.example.domainmodel;visibility:=reexport
+Bundle-ActivationPolicy: lazy
