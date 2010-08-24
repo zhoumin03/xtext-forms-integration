@@ -33,14 +33,13 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.commands.ActionHandler;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ISynchronizable;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.source.AnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -60,9 +59,6 @@ import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.MarkerAnnotationPreferences;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.xtext.IGrammarAccess;
-import org.eclipse.xtext.parser.IParseResult;
-import org.eclipse.xtext.parsetree.reconstr.XtextSerializationException;
-import org.eclipse.xtext.resource.SaveOptions;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.XtextSourceViewerConfiguration;
@@ -75,7 +71,6 @@ import org.eclipse.xtext.ui.editor.validation.IValidationIssueProcessor;
 import org.eclipse.xtext.ui.editor.validation.ValidationJob;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import org.eclipse.xtext.util.StringInputStream;
-import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
@@ -123,6 +118,17 @@ public class EmbeddedXtextEditor {
 		};
 	});
 
+	/**
+	 * Creates a new EmbeddedXtextEditor.
+	 * 
+	 * @param control the parent composite that will contain the editor
+	 * @param injector the Guice injector to get Xtext configuration elements
+	 * @param job the synchronization job that will be scheduled/rescheduled at each 
+	 * 		modification of the editor text. It may be use to reconcile the content of 
+	 * 		the editor with something else. 
+	 * @param fileExtension the file extension (without the DOT) of the textual DSL to edit
+	 * @param style the SWT style of the {@link SourceViewer} of this editor.
+	 */
 	public EmbeddedXtextEditor(Composite control, Injector injector, Job job, String fileExtension, int style) {
 		fControl = control;
 		fInjector = injector;
@@ -142,6 +148,19 @@ public class EmbeddedXtextEditor {
 		createEditor(fControl);
 	}
 	
+	/**
+	 * Creates a new EmbeddedXtextEditor.
+	 * 
+	 * Equivalent to EmbeddedXtextEditor(control, injector, job, fileExtension, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+	 * 
+	 * @param control the parent composite that will contain the editor
+	 * @param injector the Guice injector to get Xtext configuration elements
+	 * @param job the synchronization job that will be scheduled/rescheduled at each 
+	 * 		modification of the editor text. It may be use to reconcile the content of 
+	 * 		the editor with something else. 
+	 * @param fileExtension the file extension (without the DOT) of the textual DSL to edit
+	 * @param fileExtension
+	 */
 	public EmbeddedXtextEditor(Composite control, Injector injector, Job job, String fileExtension) {
 		this(control, injector, job, fileExtension, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 	}
@@ -172,7 +191,7 @@ public class EmbeddedXtextEditor {
 	 * @param editablePart
 	 * @param suffix
 	 */
-	public void setText(XtextDocument document, String editablePart) {
+	protected void setText(XtextDocument document, String editablePart) {
 		document.set(editablePart);
 		fResource = createResource(editablePart);
 		document.setInput(fResource);
@@ -197,17 +216,6 @@ public class EmbeddedXtextEditor {
 			throw new RuntimeException(e);
 		}
 		return result;
-	}
-	
-	
-	public String getEditablePart() {
-		IDocument doc= fSourceViewer.getDocument();
-		IRegion visible= fSourceViewer.getVisibleRegion();
-		try {
-			return doc.get(visible.getOffset(), visible.getLength());
-		} catch (BadLocationException e) {
-			return ""; //$NON-NLS-1$
-		}
 	}
 	
 	private void createEditor(Composite parent) {
@@ -344,7 +352,7 @@ public class EmbeddedXtextEditor {
 		}
 	}
 	
-	public XtextResource createResource() {
+	protected XtextResource createResource() {
 		ResourceSet resourceSet = fResourceSetProvider.get(null);
 		Resource grammarResource = resourceSet.createResource(
 				URI.createURI(SYNTHETIC_SCHEME + ":/" + fGrammarAccess.getGrammar().getName() + ".xtext"));
