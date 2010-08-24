@@ -289,6 +289,11 @@ public class EmbeddedXtextEditor {
 		fDocument.setValidationJob(job);
 	}
 	
+	/**
+	 * Updates the text of this editor with the given String
+	 * 
+	 * @param model
+	 */
 	public void update(String model) {
 		IDocument document = fSourceViewer.getDocument();
 		
@@ -308,6 +313,15 @@ public class EmbeddedXtextEditor {
 		this.fDeselectOnNextUpdate = "".equals(model);
 	}
 	
+	/**
+	 * Updates the text of this editor with the given String or the 
+	 * serialized form of the EObject if the semantic model of the 
+	 * String does not contain any error and is different from the 
+	 * given EObject.
+	 * 
+	 * @param eObject
+	 * @param asString
+	 */
 	public void update(EObject eObject, String asString) {
 		if (eObject != null) {
 			EObject asStringEObject = null;
@@ -331,7 +345,7 @@ public class EmbeddedXtextEditor {
 					copyResource.getContents().add(copyEObject);
 					if (!equals(copyEObject, asStringEObject)) {
 //						String model = getResource().getSerializer().serialize(copyEObject, SaveOptions.newBuilder().noValidation().format().getOptions());
-						update(asString); // should update with the  
+						update(asString); // FIXME: should update with the serialized form of the copyEObject but throw RuntimeException!!! 
 					} else {
 						// if there is no error and the content are equals, then we also update with the string
 						update(asString);
