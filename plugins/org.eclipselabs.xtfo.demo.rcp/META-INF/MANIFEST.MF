@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Xtext-Forms Integration Demo RCP Application
+Bundle-SymbolicName: org.eclipselabs.xtfo.demo.rcp;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: ProxiAD
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
+ org.eclipse.core.expressions;bundle-version="3.4.200",
+ org.eclipse.ui.editors;bundle-version="3.6.0",
+ org.eclipse.jface.text;bundle-version="3.6.0",
+ org.eclipse.ui.forms;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.6.0",
+ org.eclipse.emf.ecore;bundle-version="2.6.0",
+ org.eclipse.emf.common.ui;bundle-version="2.6.0",
+ org.eclipse.emf.compare;bundle-version="1.1.0",
+ org.eclipse.emf.compare.diff;bundle-version="1.1.0",
+ org.eclipse.emf.compare.match;bundle-version="1.1.0",
+ org.eclipse.xtext.ui;bundle-version="1.0.0",
+ org.eclipselabs.xtfo.demo.metamodel;bundle-version="1.0.0",
+ org.eclipselabs.xtfo.demo.metamodel.edit;bundle-version="1.0.0",
+ org.eclipse.xtext.example.arithmetics;bundle-version="1.0.0",
+ org.eclipse.xtext.example.arithmetics.edit;bundle-version="1.0.0",
+ org.eclipse.xtext.example.arithmetics.ui;bundle-version="1.0.0",
+ org.eclipse.xtext.example.domainmodel;bundle-version="1.0.0",
+ org.eclipse.xtext.example.domainmodel.edit;bundle-version="1.0.0",
+ org.eclipse.xtext.example.domainmodel.ui;bundle-version="1.0.0"
