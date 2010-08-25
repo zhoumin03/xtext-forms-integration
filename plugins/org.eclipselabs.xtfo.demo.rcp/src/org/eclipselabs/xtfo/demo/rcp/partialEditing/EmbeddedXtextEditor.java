@@ -9,6 +9,7 @@
  * Contributors:
  *    Obeo - initial API and implementation
  *    itemis AG - source viewer configuration
+ *    Sebastian Zarnekow (Itemis AG) - synthetic resource creation 
  */
 package org.eclipselabs.xtfo.demo.rcp.partialEditing;
 
